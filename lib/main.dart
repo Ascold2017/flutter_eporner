@@ -5,19 +5,56 @@ import 'package:flutter_eporner/widgets/detailsScreen/detailScreen.dart'
     as detailScreen;
 
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_eporner/videosResponse.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+import 'package:camera/camera.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+List<CameraDescription> cameras;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  cameras = await availableCameras();
+  print(cameras);
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+@override
+  State<StatefulWidget> createState() {
+    return MyAppState();
+  }
+}
+
+class MyAppState extends State<MyApp> {
+  CameraController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = CameraController(cameras[0], ResolutionPreset.low);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Eporner',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -26,7 +63,7 @@ class MyApp extends StatelessWidget {
         providers: [ChangeNotifierProvider(create: (_) => VideosProvider(),) ],
       ),
       routes: {
-        '/detail': (ctx) => detailScreen.DetailScreen()
+        '/detail': (ctx) => detailScreen.DetailScreen(controller)
       },
     );
   }

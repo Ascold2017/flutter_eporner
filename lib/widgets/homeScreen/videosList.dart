@@ -35,9 +35,7 @@ Widget _videoItem(BuildContext context, VideosResponse.Videos video) {
   return SizedBox(
     height: 250,
     child: GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/detail', arguments: video);
-      },
+      onTap: () => Navigator.pushNamed(context, '/detail', arguments: video),
       child: Stack(
         fit: StackFit.passthrough,
         children: <Widget>[
