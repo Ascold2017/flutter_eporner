@@ -25,18 +25,18 @@ class _VideosList extends State<VideosList> {
               itemBuilder: (ctx, index) {
                 VideosResponse.Videos video = _state.videos[index];
 
-                return _videoItem(video);
+                return _videoItem(context, video);
               }),
     );
   }
 }
 
-Widget _videoItem(VideosResponse.Videos video) {
+Widget _videoItem(BuildContext context, VideosResponse.Videos video) {
   return SizedBox(
     height: 250,
     child: GestureDetector(
       onTap: () {
-        print('tap');
+        Navigator.pushNamed(context, '/detail', arguments: video);
       },
       child: Stack(
         fit: StackFit.passthrough,
@@ -61,12 +61,4 @@ Widget _videoItem(VideosResponse.Videos video) {
       ),
     ),
   );
-}
-
-class VideosListState extends ChangeNotifier {
-  String currentTappedItemId;
-  void setTappedItemId(String id) {
-    currentTappedItemId = id;
-    notifyListeners();
-  }
 }

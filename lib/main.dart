@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_eporner/widgets/homeScreen/homeScreen.dart'
     as homeScreen;
+import 'package:flutter_eporner/widgets/detailsScreen/detailScreen.dart'
+    as detailScreen;
 
 import 'dart:convert';
 
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
         providers: [ChangeNotifierProvider(create: (_) => VideosProvider(),) ],
       ),
       routes: {
-        //'/': (ctx) => homeScreen.homeScreen()
+        '/detail': (ctx) => detailScreen.DetailScreen()
       },
     );
   }
