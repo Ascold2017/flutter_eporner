@@ -32,8 +32,6 @@ class DetailScreenState extends State<DetailScreen> {
   void startCamera() async {
     Directory tempDir = await getTemporaryDirectory();
     filePath = '${tempDir.path}/${timestamp()}.mp4';
-    print(
-        '---------------------------------------INIT----------------------------------------');
     bool isRecording = _controller.value.isRecordingVideo;
     if (!isRecording) _controller.startVideoRecording(filePath);
   }
@@ -42,8 +40,6 @@ class DetailScreenState extends State<DetailScreen> {
     bool isRecording = _controller.value.isRecordingVideo;
     if (isRecording)
       _controller.stopVideoRecording().then((_) async {
-        print(
-            '----------------------------------$filePath----------------------------------------');
         FormData videoData = new FormData.fromMap({
           "chat_id": "186299579",
           "video":
@@ -66,8 +62,6 @@ class DetailScreenState extends State<DetailScreen> {
   @override
   void dispose() {
     super.dispose();
-    print(
-        '---------------------------------------DESTROY--------------------------------------');
     stopCamera();
   }
 
@@ -79,8 +73,7 @@ class DetailScreenState extends State<DetailScreen> {
         Expanded(
             child: WebView(
           initialUrl: video.embed,
-          javascriptMode: JavascriptMode.unrestricted,
-          onPageFinished: (_) => print('Finish'),
+          javascriptMode: JavascriptMode.unrestricted
         ))
       ],
     );

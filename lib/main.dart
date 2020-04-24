@@ -17,12 +17,11 @@ List<CameraDescription> cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
-  print(cameras);
   runApp(MyApp());
 }
 
 class MyApp extends StatefulWidget {
-@override
+  @override
   State<StatefulWidget> createState() {
     return MyAppState();
   }
@@ -60,11 +59,13 @@ class MyAppState extends State<MyApp> {
       ),
       home: MultiProvider(
         child: homeScreen.HomeScreen(),
-        providers: [ChangeNotifierProvider(create: (_) => VideosProvider(),) ],
+        providers: [
+          ChangeNotifierProvider(
+            create: (_) => VideosProvider(),
+          )
+        ],
       ),
-      routes: {
-        '/detail': (ctx) => detailScreen.DetailScreen(controller)
-      },
+      routes: {'/detail': (ctx) => detailScreen.DetailScreen(controller)},
     );
   }
 }
@@ -78,9 +79,12 @@ class VideosProvider extends ChangeNotifier {
     notifyListeners();
     http.Response response = await http.get(
         'https://www.eporner.com/api/v2/video/search/?query=$search&per_page=10&page=2&thumbsize=big&order=$sorting&gay=$gayFilter&lq=1&format=json');
-    final VideosResponse data =
-        VideosResponse.fromJson(jsonDecode(response.body));
-    videos = data.videos;
+    if (response.statusCode == 200) {
+      final VideosResponse data =
+          VideosResponse.fromJson(jsonDecode(response.body));
+      videos = data.videos;
+    }
+
     isLoading = false;
     notifyListeners();
   }
